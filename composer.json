@@ -1,0 +1,46 @@
+{
+    "name": "danieladarve/raisely-webhooks",
+    "description": "Handles Raisely's Webhooks in CraftCMS",
+    "type": "craft-plugin",
+    "version": "1.0.1",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "raisely webhooks",
+        "raisely"
+    ],
+    "support": {
+        "docs": "https://github.com/danieladarve/raisely-webhooks/blob/master/README.md",
+        "issues": "https://github.com/danieladarve/raisely-webhooks/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel G Adarve",
+            "email": "dgonzalezad@gmail.com"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0"
+    },
+    "require-dev": {
+      "craftcms/cms": "^3.2.0",
+      "codeception/codeception": "^3.0",
+      "vlucas/phpdotenv": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+          "danieladarve\\raiselywebhooks\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Raisely Webhooks",
+        "handle": "raisely-webhooks",
+        "hasCpSettings": false,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/danieladarve/raisely-webhooks/master/CHANGELOG.md",
+        "class": "danieladarve\\raiselywebhooks\\RaiselyWebhooks"
+    }
+}
