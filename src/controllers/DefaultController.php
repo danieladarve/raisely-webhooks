@@ -11,6 +11,8 @@
 namespace danieladarve\raiselywebhooks\controllers;
 
 use Craft;
+use craft\records\EntryType;
+use craft\records\Section;
 use craft\web\Controller;
 use danieladarve\raiselywebhooks\RaiselyWebhooks;
 use craft\elements\Entry;
@@ -55,6 +57,7 @@ class DefaultController extends Controller
     try {
       return $this->savePoppy($eventPayload->data);
     } catch (\Exception $exception) {
+      Craft::error($exception->getMessage(), __METHOD__);
       return FALSE;
     }
   }
@@ -65,21 +68,30 @@ class DefaultController extends Controller
    */
   protected function verifySignature($payload)
   {
+    if (!isset($payload->secret)) {
+      return FALSE;
+    }
     $secret = RaiselyWebhooks::$plugin->getSettings()->signingSecret;
     return $secret === $payload->secret;
   }
 
   /**
    * @param $eventPayload
-   * @return bool
+   * @return Entry
    * @throws \Throwable
+   * @throws \craft\errors\ElementNotFoundException
+   * @throws \yii\base\Exception
    */
   protected function savePoppy($eventPayload)
   {
-    $entry = new Entry();
+    $entryType = EntryType::find()->where(['handle' => 'poppy'])->one();
 
-    $entry->sectionId = Craft::$app->sections->getSectionByHandle('poppy')->id;
-    $entry->typeId = 3;
+    $entry = new Entry();
+    $entry->sectionId = $entryType->getAttribute('sectionId');
+    $entry->typeId = $entryType->getAttribute('id');
+    $entry->fieldLayoutId =$entryType->getAttribute('fieldLayoutId');
+    $entry->authorId = 0;
+
     $entry->enabled = TRUE;
     $entry->title = $eventPayload->data->private->title;
     $entry->setFieldValues([
@@ -92,6 +104,5 @@ class DefaultController extends Controller
     ]);
 
     return Craft::$app->elements->saveElement($entry);
-
   }
 }
